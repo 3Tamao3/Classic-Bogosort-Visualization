@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Classic Bogosort Visualization</title>
+    <style>
+      body {
+        background: black;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+      }
+      canvas {
+        border: 1px solid white;
+        margin-bottom: 20px;
+      }
+      button {
+        border: purple;
+        border-radius: 25px;
+        background-color: purple;
+        color: white;
+        padding: 15px;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        font-size: 20px;
+      }
+      button:hover {
+        background-color: rgb(224, 140, 224);
+        transform: scale(1.05);
+      }
+      h1 {
+        color: white;
+        text-align: center;
+        margin-top: 40px;
+        margin-bottom: 10px;
+      }
+      .text {
+        margin: 20px 200px 0 200px;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas" width="600" height="400"></canvas>
+    <button onclick="startSort()">Click To Start Classic Bogosort</button>
+    <h1>Read while it's sorting-></h1>
+    <h1 class="text">
+      Bogosort (AKA permutation- or stupid sort) is a sorting method that works
+      by trial and error. Essentially, it keeps shuffling the items in a list
+      until they're in the right order. This process repeats until luck strikes
+      and the list magically becomes sorted. While bogosort isn't practical for
+      real-world sorting tasks because it's extremely slow, it's often used in
+      classrooms to show how sorting algorithms work, especially when compared
+      to faster ones (Ex.: Bubble Sort).
+      <br /><br />
+      The time complexity of Bogosort is highly unpredictable and is generally
+      expressed as O(n * n!), where n is the number of elements in the list.
+      This notation indicates that the time it takes to sort the list grows
+      factorially with the number of elements, making it exponentially
+      inefficient for large inputs.
+    </h1>
+    <script>
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+      const numbers = [5, 3, 8, 1, 4, 2, 5, 7, 9, 10];
+      const colors = [
+        "#FF5733",
+        "#FFBD33",
+        "#33FF57",
+        "#3373FF",
+        "#C833FF",
+        "#5f514d",
+        "#81933b",
+        "#3adb71",
+        "#2518b3",
+        "#9a302b",
+      ];
+
+      function drawNumbers() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const barWidth = canvas.width / numbers.length;
+        const maxNumber = Math.max(...numbers);
+        numbers.forEach((num, index) => {
+          const barHeight = (num / maxNumber) * canvas.height;
+          ctx.fillStyle = colors[index];
+          ctx.fillRect(
+            index * barWidth,
+            canvas.height - barHeight,
+            barWidth,
+            barHeight
+          );
+        });
+      }
+
+      function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [array[i], array[j]] = [array[j], array[i]];
+        }
+      }
+
+      function isSorted(array) {
+        for (let i = 0; i < array.length - 1; i++) {
+          if (array[i] > array[i + 1]) {
+            return false;
+          }
+        }
+        return true;
+      }
+
+      async function quantumBogosort() {
+        while (!isSorted(numbers)) {
+          shuffleArray(numbers);
+          drawNumbers();
+          await sleep(500);
+        }
+      }
+
+      function sleep(ms) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+      }
+
+      function startSort() {
+        quantumBogosort();
+      }
+
+      drawNumbers();
+    </script>
+  </body>
+</html>
