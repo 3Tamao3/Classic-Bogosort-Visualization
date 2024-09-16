@@ -3,10 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Classic Bogosort Visualization</title>
+    <title>Bogosort Visualization</title>
     <style>
       body {
-        background: black;
+        background-color: #222;
+        color: white;
+        font-family: Arial, sans-serif;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -14,40 +16,45 @@
         height: 100vh;
         margin: 0;
       }
+
       canvas {
-        border: 1px solid white;
-        margin-bottom: 20px;
-        margin-top: 200px;
+        margin-top: 20px;
+        border: 2px solid #fff;
+        border-radius: 10px;
+        background-color: #333;
       }
+
       button {
-        border: purple;
-        border-radius: 25px;
-        background-color: purple;
+        margin-top: 20px;
+        padding: 10px 20px;
+        background-color: #28a745;
         color: white;
-        padding: 15px;
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
-        font-size: 20px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
       }
+
       button:hover {
-        background-color: rgb(224, 140, 224);
-        transform: scale(1.05);
+        background-color: #218838;
       }
+
       h1 {
-        color: white;
-        text-align: center;
-        margin-top: 40px;
-        margin-bottom: 10px;
+        margin-top: 30px;
+        font-size: 24px;
       }
-      .text {
-        margin: 20px 200px 0 200px;
+
+      p {
+        text-align: center;
+        max-width: 600px;
       }
     </style>
   </head>
   <body>
+    <h1>Bogosort Visualization</h1>
     <canvas id="canvas" width="600" height="400"></canvas>
-    <button onclick="startSort()">Click To Start Classic Bogosort</button>
-    <h1>Read while it's sorting-></h1>
-    <h1 class="text">
+    <button onclick="startSort()">Start Sorting</button>
+    <p>
       Bogosort (AKA permutation- or stupid sort) is a sorting method that works
       by trial and error. Essentially, it keeps shuffling the items in a list
       until they're in the right order. This process repeats until luck strikes
@@ -55,29 +62,13 @@
       real-world sorting tasks because it's extremely slow, it's often used in
       classrooms to show how sorting algorithms work, especially when compared
       to faster ones (Ex.: Bubble Sort).
-      <br /><br />
-      The time complexity of Bogosort is highly unpredictable and is generally
-      expressed as O(n * n!), where n is the number of elements in the list.
-      This notation indicates that the time it takes to sort the list grows
-      factorially with the number of elements, making it exponentially
-      inefficient for large inputs.
-    </h1>
+    </p>
+
     <script>
-      const canvas = document.getElementById("canvas");
-      const ctx = canvas.getContext("2d");
-      const numbers = [5, 3, 8, 1, 4, 2, 5, 7, 9, 10];
-      const colors = [
-        "#FF5733",
-        "#FFBD33",
-        "#33FF57",
-        "#3373FF",
-        "#C833FF",
-        "#5f514d",
-        "#81933b",
-        "#3adb71",
-        "#2518b3",
-        "#9a302b",
-      ];
+      const canvas = document.getElementById('canvas');
+      const ctx = canvas.getContext('2d');
+      let numbers = [5, 3, 8, 1, 4, 2, 7, 6, 9, 10];
+      const colors = ['#e74c3c', '#3498db', '#f1c40f', '#2ecc71', '#9b59b6'];
 
       function drawNumbers() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -85,13 +76,8 @@
         const maxNumber = Math.max(...numbers);
         numbers.forEach((num, index) => {
           const barHeight = (num / maxNumber) * canvas.height;
-          ctx.fillStyle = colors[index];
-          ctx.fillRect(
-            index * barWidth,
-            canvas.height - barHeight,
-            barWidth,
-            barHeight
-          );
+          ctx.fillStyle = colors[index % colors.length];
+          ctx.fillRect(index * barWidth, canvas.height - barHeight, barWidth, barHeight);
         });
       }
 
@@ -111,20 +97,16 @@
         return true;
       }
 
-      async function quantumBogosort() {
+      async function bogosort() {
         while (!isSorted(numbers)) {
           shuffleArray(numbers);
           drawNumbers();
-          await sleep(500);
+          await new Promise((resolve) => setTimeout(resolve, 300));
         }
       }
 
-      function sleep(ms) {
-        return new Promise((resolve) => setTimeout(resolve, ms));
-      }
-
       function startSort() {
-        quantumBogosort();
+        bogosort();
       }
 
       drawNumbers();
